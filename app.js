@@ -50,7 +50,8 @@ app.get('/home', function (req, res) {
 			console.log(requestres.body['fields']);
 			var fields = requestres.body['fields'];
 			fields.forEach(function(entry) {
-			    console.log(entry['centroid']);
+			    console.log(entry['centroid']['coordinates'][0]);
+			    console.log(entry['centroid']['coordinates'][1]);
 			});
 		});
 		
