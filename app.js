@@ -5,23 +5,36 @@ var exphbs = require('express-handlebars');
 var request = require('superagent');
 var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
+var mysql      = require('mysql');
 var app = express();
 app.use(cookieParser());
 app.use(flash());
-
 app.set('views', 'src/views');
-
 app.engine('handlebars', exphbs({
   layoutsDir: 'src/views/layouts/',
   defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
 
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'apps',
+});
+connection.connect();
+
 app.get('/', function (req, res) {
   // app.use(bodyParser.urlencoded({ extended: true }));
   res.send('Here is our amazing frontpage. Please login');
 
 });
+app.get('/add/:id', function (req, res) {
+  // app.use(bodyParser.urlencoded({ extended: true }));
+  res.send('here is the id: ' + req.params.id);
+
+});
+
 app.get('/post_login', function(req, res) {
 	request
 	.post('https://climate.com/api/oauth/token')
@@ -36,7 +49,7 @@ app.get('/post_login', function(req, res) {
 		var access_token = requestres.body['access_token'];
 		var name = requestres.body['user']['firstname'] + " " + requestres.body['user']['lastname'];
 		var email = requestres.body['user']['email'];
-		console.log(requestres);
+
 		res.cookie('token',access_token, { maxAge: requestres.body['expires_in'], httpOnly: true });
 		res.cookie('name',name, { maxAge: requestres.body['expires_in'], httpOnly: true });
 		res.cookie('email',email, { maxAge: requestres.body['expires_in'], httpOnly: true });
