@@ -36,19 +36,22 @@ app.get('/post_login', function(req, res) {
 	});
 });
 app.get('/home', function (req, res) {
-	 // console.log("Cookies: ", req.cookies)
-
 	if (req.cookies.token === undefined) {
 		res.send("not authed!");
 	}
 	else {
 		var header = "Bearer " + req.cookies.token;
+		console.log(header);
 		request
-		.post('https://hackillinois.climate.com/api/fields')
-		.type('form')
+		.get('https://hackillinois.climate.com/api/fields?includeBoundary=false')
+		.set('Accept', 'application/json')
 		.set('Authorization', header)
 		.end(function(err, requestres){
-			console.log(requestres.body);
+			console.log(requestres.body['fields']);
+			var fields = requestres.body['fields'];
+			fields.forEach(function(entry) {
+			    console.log(entry['centroid']);
+			});
 		});
 		
 		res.send('Home page after authorization');
