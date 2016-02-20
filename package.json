@@ -4,7 +4,9 @@
   "description": "its got be lit",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "dotenv": "^1.2.0",
+    "express-handlebars": "^2.0.1"
   },
   "devDependencies": {},
   "scripts": {
