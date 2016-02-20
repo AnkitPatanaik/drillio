@@ -10,7 +10,7 @@ Here are all of your fields
 	$(".map_link").click(function() {
 		var id = $(this).data("id");
 		$.get("http://localhost:3000/add/" + id, function( data ) {
-			alert( "Load was performed." );
+			console.log("ok!");
 		});
 	});
 </script>

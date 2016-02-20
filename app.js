@@ -30,9 +30,20 @@ app.get('/', function (req, res) {
 
 });
 app.get('/add/:id', function (req, res) {
-  // app.use(bodyParser.urlencoded({ extended: true }));
-  res.send('here is the id: ' + req.params.id);
-
+	// app.use(bodyParser.urlencoded({ extended: true }));
+	console.log(req.params.id);
+	connection.query('SELECT * from `fields` WHERE uuid=?', [req.params.id], function (error, results, fields) {
+		if(results.length == 0) {
+			connection.query('INSERT INTO `fields` (uuid, email) VALUES (?,?)', [req.params.id, req.cookies.email], function (error, results, fields) {
+	  		console.log(error);
+	  		res.sendStatus(200);
+			});
+		}
+		else {
+			res.sendStatus(400);
+		}
+	});
+	
 });
 
 app.get('/post_login', function(req, res) {
