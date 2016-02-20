@@ -68,6 +68,17 @@ app.get('/home', function (req, res) {
 		// res.send('Home page after authorization');
 	}
 });
+
+//have a link to add stuff on home page
+app.get('/add', function (req, res) {
+	if (req.cookies.token === undefined) {
+		res.send("not authed!");
+	}
+	else {
+		res.redirect('https://climate.com/static/mfs/index.html');
+	}
+})
+
 app.get('/buy', function (req, res) {
 	res.send('Sell page');
 });
