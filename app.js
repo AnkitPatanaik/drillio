@@ -9,6 +9,14 @@ var app = express();
 app.use(cookieParser());
 app.use(flash());
 
+app.set('views', 'src/views');
+
+app.engine('handlebars', exphbs({
+  layoutsDir: 'src/views/layouts/',
+  defaultLayout: 'main'
+}));
+app.set('view engine', 'handlebars');
+
 app.get('/', function (req, res) {
   // app.use(bodyParser.urlencoded({ extended: true }));
   res.send('Here is our amazing frontpage. Please login');
@@ -54,8 +62,10 @@ app.get('/home', function (req, res) {
 			    console.log(entry['centroid']['coordinates'][1]);
 			});
 		});
-		
-		res.send('Home page after authorization');
+		res.render('home', {
+	        title: 'Fields',
+      	});
+		// res.send('Home page after authorization');
 	}
 });
 app.get('/buy', function (req, res) {
