@@ -11,27 +11,22 @@ app.get('/', function (req, res) {
 
 });
 app.get('/post_login', function(req, res) {
-	// console.log(req.query.code);
-  	if(req.query.code != null) {
-	  request
-	  .post('https://climate.com/api/oauth/token')
-	  .type('form')
-	  .send({grant_type: 'authorization_code'})
-	  .send({scope: 'openid user'})
-	  .send({redirect_uri: 'http://localhost:3000/post_login'})
-	  .send({code: req.query.code})
-	  // .send({ grant_type: '', scope: 'openid user', redirect_uri : ', code : req.query.code})
-	  .set('Authorization', 'Basic ZHBjYWx2NGZsbHNjM3M6bmRtcWN2cGYyMzFpc2c3ODk3aHNyaGlwZzU=')
-	  .end(function(err, res){
-	    // console.log(err);
-	    // console.log(res);
-	  });
-	}
-	else {
-		console.log("we made it boyz");
-	}
+	request
+	.post('https://climate.com/api/oauth/token')
+	.type('form')
+	.send({grant_type: 'authorization_code'})
+	.send({scope: 'openid user'})
+	.send({redirect_uri: 'http://localhost:3000/post_login'})
+	.send({code: req.query.code})
+	.set('Authorization', 'Basic ZHBjYWx2NGZsbHNjM3M6bmRtcWN2cGYyMzFpc2c3ODk3aHNyaGlwZzU=')
+	.end(function(err, res1){
+	  // console.log(err);
+	  // console.log(res);
+	  console.log("we made it boyz1");
+	  res.redirect('/loggedin');
+	});
 });
-app.get('/get_token', function (req, res) {
+app.get('/loggedin', function (req, res) {
 	res.send('Sell page');
 	console.log(res.body);
 });
