@@ -19,15 +19,13 @@ app.get('/post_login', function(req, res) {
 	.send({redirect_uri: 'http://localhost:3000/post_login'})
 	.send({code: req.query.code})
 	.set('Authorization', 'Basic ZHBjYWx2NGZsbHNjM3M6bmRtcWN2cGYyMzFpc2c3ODk3aHNyaGlwZzU=')
-	.end(function(err, res1){
-	  // console.log(err);
-	  // console.log(res);
-	  console.log("we made it boyz1");
-	  res.redirect('/loggedin');
+	.end(function(err, requestres){
+		// store token and info
+	  	res.redirect('/home');
 	});
 });
-app.get('/loggedin', function (req, res) {
-	res.send('Sell page');
+app.get('/home', function (req, res) {
+	res.send('Home page after authorization');
 	console.log(res.body);
 });
 app.get('/buy', function (req, res) {
