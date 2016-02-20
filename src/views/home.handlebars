@@ -1,1 +1,7 @@
-SUPPPP
+You have X fields selected to trade
+<hr/>
+Here are all of your fields
+<hr/>        
+{{#each map}}
+	<a href="{{this.uuid}}"><img src="https://maps.googleapis.com/maps/api/staticmap?center={{this.centroid.coordinates.[1]}},{{this.centroid.coordinates.[0]}}&zoom=12&size=300x300&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA"></a>
+{{/each}}
