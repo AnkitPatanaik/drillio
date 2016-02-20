@@ -6,7 +6,9 @@ var request = require('superagent');
 var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
 var mysql      = require('mysql');
+var path = require("path");
 var app = express();
+
 app.use(cookieParser());
 app.use(flash());
 app.set('views', 'src/views');
@@ -15,7 +17,7 @@ app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
-
+app.use('/assets',  express.static(__dirname + '/src/assets'));
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',

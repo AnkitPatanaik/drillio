@@ -1,12 +1,47 @@
+
+     {{#each map}}
+	<a href="#" data-id="{{this.uuid}}" class="map_link"><img src="https://maps.googleapis.com/maps/api/staticmap?center={{this.centroid.coordinates.[1]}},{{this.centroid.coordinates.[0]}}&zoom=12&size=300x300&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA"></a>
+{{/each}}  
+
+
 You have X fields selected to trade
 <hr/>
 Here are all of your fields
-<hr/>        
+<hr/> 
+<div id="viewport">
+        <ul class="stack">       
 {{#each map}}
-	<a href="#" data-id="{{this.uuid}}" class="map_link"><img src="https://maps.googleapis.com/maps/api/staticmap?center={{this.centroid.coordinates.[1]}},{{this.centroid.coordinates.[0]}}&zoom=12&size=300x300&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA"></a>
+	<li><img src="https://maps.googleapis.com/maps/api/staticmap?center={{this.centroid.coordinates.[1]}},{{this.centroid.coordinates.[0]}}&zoom=12&size=300x300&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA"></li>
 {{/each}}
-
+        </ul>
+    </div>
+    <br/>
+    <br/>
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    var stack;
+
+    stack = gajus.Swing.Stack();
+
+    [].forEach.call(document.querySelectorAll('.stack li'), function (targetElement) {
+        stack.createCard(targetElement);
+
+        targetElement.classList.add('in-deck');
+    });
+
+    stack.on('throwout', function (e) {
+        console.log(e.target.innerText || e.target.textContent, 'has been thrown out of the stack to the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
+        
+        e.target.classList.remove('in-deck');
+    });
+
+    stack.on('throwin', function (e) {
+        console.log(e.target.innerText || e.target.textContent, 'has been thrown into the stack from the', e.throwDirection == 1 ? 'right' : 'left', 'direction.');
+
+        e.target.classList.add('in-deck');
+    });
+});
+$('img').on('dragstart', function(event) { event.preventDefault(); });
 	$(".map_link").click(function() {
 		var id = $(this).data("id");
 		$.get("http://localhost:3000/add/" + id, function( data ) {
