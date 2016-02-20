@@ -4,8 +4,10 @@ var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var request = require('superagent');
 var cookieParser = require('cookie-parser');
+var flash = require('connect-flash');
 var app = express();
 app.use(cookieParser());
+app.use(flash());
 
 app.get('/', function (req, res) {
   // app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,10 +36,21 @@ app.get('/post_login', function(req, res) {
 	});
 });
 app.get('/home', function (req, res) {
+	 // console.log("Cookies: ", req.cookies)
+
 	if (req.cookies.token === undefined) {
 		res.send("not authed!");
 	}
 	else {
+		var header = "Bearer " + req.cookies.token;
+		request
+		.post('https://hackillinois.climate.com/api/fields')
+		.type('form')
+		.set('Authorization', header)
+		.end(function(err, requestres){
+			console.log(requestres.body);
+		});
+		
 		res.send('Home page after authorization');
 	}
 });
