@@ -3,7 +3,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var request = require('superagent');
+var cookieParser = require('cookie-parser');
 var app = express();
+app.use(cookieParser());
 
 app.get('/', function (req, res) {
   // app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,12 +23,14 @@ app.get('/post_login', function(req, res) {
 	.set('Authorization', 'Basic ZHBjYWx2NGZsbHNjM3M6bmRtcWN2cGYyMzFpc2c3ODk3aHNyaGlwZzU=')
 	.end(function(err, requestres){
 		// store token and info
+		var access_token = requestres.body['access_token'];
+
+		res.cookie('token',access_token, { maxAge: requestres.body['expires_in'], httpOnly: true });
 	  	res.redirect('/home');
 	});
 });
 app.get('/home', function (req, res) {
 	res.send('Home page after authorization');
-	console.log(res.body);
 });
 app.get('/buy', function (req, res) {
 	res.send('Sell page');
