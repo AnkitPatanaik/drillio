@@ -9,7 +9,7 @@ app.use(cookieParser());
 
 app.get('/', function (req, res) {
   // app.use(bodyParser.urlencoded({ extended: true }));
-  res.send('Hello World!');
+  res.send('Here is our amazing frontpage. Please login');
 
 });
 app.get('/post_login', function(req, res) {
@@ -24,13 +24,22 @@ app.get('/post_login', function(req, res) {
 	.end(function(err, requestres){
 		// store token and info
 		var access_token = requestres.body['access_token'];
-
+		var name = requestres.body['user']['firstname'] + " " + requestres.body['user']['lastname'];
+		var email = requestres.body['user']['email'];
+		console.log(requestres);
 		res.cookie('token',access_token, { maxAge: requestres.body['expires_in'], httpOnly: true });
+		res.cookie('name',name, { maxAge: requestres.body['expires_in'], httpOnly: true });
+		res.cookie('email',email, { maxAge: requestres.body['expires_in'], httpOnly: true });
 	  	res.redirect('/home');
 	});
 });
 app.get('/home', function (req, res) {
-	res.send('Home page after authorization');
+	if (req.cookies.token === undefined) {
+		res.send("not authed!");
+	}
+	else {
+		res.send('Home page after authorization');
+	}
 });
 app.get('/buy', function (req, res) {
 	res.send('Sell page');
