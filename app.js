@@ -136,10 +136,19 @@ app.get('/home', function (req, res) {
 
 app.get('/add', function (req, res) {
 	if (req.cookies.token === undefined) {
-		res.send("not authed!");
+		res.redirect('/login');
 	}
 	else {
 		res.redirect('https://climate.com/static/mfs/index.html');
+	}
+})
+
+app.get('/view', function (req, res) {
+	if (req.cookies.token === undefined) {
+		res.redirect('/login');
+	}
+	else {
+		res.send('show farms');
 	}
 })
 
