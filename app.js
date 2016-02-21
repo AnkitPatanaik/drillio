@@ -76,6 +76,8 @@ app.get('/home', function (req, res) {
 	else {
 		var header = "Bearer " + req.cookies.token;
 		var map = [];
+		var firstmap;
+		var i = 0;
 		request
 		.get('https://hackillinois.climate.com/api/fields?includeBoundary=false')
 		.set('Accept', 'application/json')
@@ -85,11 +87,20 @@ app.get('/home', function (req, res) {
 			var fields = requestres.body['fields'];
 			fields.forEach(function(entry) {
 			 	// map.push("https://maps.googleapis.com/maps/api/staticmap?center=" + entry['centroid']['coordinates'][1] + "," +   entry['centroid']['coordinates'][0] +"&zoom=12&size=300x300&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA");
-			 	map.push(entry);
+			 	
+			 	if(!i) {
+			 		firstmap = entry;
+			 		i = 1;
+			 	}
+			 	else {
+			 		map.push(entry);
+			 	}
 			});
+			console.log(firstmap);
 			res.render('home', {
 	        	title: 'Fields',
 	        	map: map,
+	        	firstmap: firstmap,
       		});
 		});
 	}
