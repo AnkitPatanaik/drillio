@@ -99,7 +99,7 @@ app.get('/post_login', function(req, res) {
 });
 app.get('/home', function (req, res) {
 	if (req.cookies.token === undefined) {
-		res.send("not authed!");
+		res.redirect('/login');
 	}
 	else {
 		var header = "Bearer " + req.cookies.token;
@@ -134,7 +134,6 @@ app.get('/home', function (req, res) {
 	}
 });
 
-//have a link to add stuff on home page
 app.get('/add', function (req, res) {
 	if (req.cookies.token === undefined) {
 		res.send("not authed!");
@@ -144,17 +143,9 @@ app.get('/add', function (req, res) {
 	}
 })
 
-
-app.get('/buy', function (req, res) {
-	res.send('Sell page');
-});
-
 app.get('/login', function (req, res) {
-	//res.send('login');
 	res.redirect('https://climate.com/static/app-login/index.html?scope=openid+user&page=oidcauthn&mobile=true&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fpost_login&client_id=dpcalv4fllsc3s');
-
-	//redirect to climate login here
-});//change
+});
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
