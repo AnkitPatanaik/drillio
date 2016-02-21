@@ -148,7 +148,31 @@ app.get('/view', function (req, res) {
 		res.redirect('/login');
 	}
 	else {
-		res.send('show farms');
+		if (req.cookies.token === undefined) {
+			res.redirect('/login');
+		}
+		else {
+			var header = "Bearer " + req.cookies.token;
+			var map = [];
+			var firstmap;
+			var i = 0;
+			request
+			.get('https://hackillinois.climate.com/api/fields?includeBoundary=false')
+			.set('Accept', 'application/json')
+			.set('Authorization', header)
+			.end(function(err, requestres){
+				// console.log(requestres.body['fields']);
+				var fields = requestres.body['fields'];
+				fields.forEach(function(entry) {
+					map.push(entry);
+				});
+				// console.log(firstmap);
+				res.render('view', {
+		        	title: 'Viewing My Fields',
+		        	map: map,
+	      		});
+			});
+		}
 	}
 })
 
