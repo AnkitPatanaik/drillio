@@ -15,5 +15,9 @@ body {
 <h1 class="text-center heading-title">Drillio</h1>
 <h3 class="text-center heading-tag">Let us help you seed your fields</h3>
 <div style="text-align:center;">
-	<a href="/login" class="btn btn-success btn-lg heading-button">SIGN IN WITH CLIMATE.COM</a>
+	{{#if status}}
+		<a href="/login" class="btn btn-success btn-lg heading-button">CONTINUE BROWSING FIELDS</a>
+	{{else}}
+		<a href="/login" class="btn btn-success btn-lg heading-button">SIGN IN WITH CLIMATE.COM</a>
+	{{/if}}
 </div>

@@ -27,8 +27,13 @@ var connection = mysql.createConnection({
 connection.connect();
 
 app.get('/', function (req, res) {
+	var status = 0;
+	if (req.cookies.token !== undefined) {
+		status = 1;
+	}
 	res.render('splash', {
 		title: 'Welcome',
+		status: status,
 	});
 });
 app.get('/add/:id', function (req, res) {
