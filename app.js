@@ -27,9 +27,9 @@ var connection = mysql.createConnection({
 connection.connect();
 
 app.get('/', function (req, res) {
-  // app.use(bodyParser.urlencoded({ extended: true }));
-  res.send('Here is our amazing frontpage. Please login');
-
+	res.render('splash', {
+		title: 'Welcome',
+	});
 });
 app.get('/add/:id', function (req, res) {
 	// app.use(bodyParser.urlencoded({ extended: true }));
