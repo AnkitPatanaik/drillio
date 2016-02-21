@@ -3,6 +3,7 @@
     <div class="thumbnail">
 		<img src="https://maps.googleapis.com/maps/api/staticmap?center={{this.centroid.coordinates.[1]}},{{this.centroid.coordinates.[0]}}&zoom=13&size=340x340&maptype=satellite&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA">
 		<div class="caption">
+			<h4>Field Size: {{this.area.q}} acres</h4>
 			Who's interested:<br/>
 	       	{{#each likes}}
 				{{this.email}}<br/>
