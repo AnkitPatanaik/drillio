@@ -160,10 +160,16 @@ app.get('/view', function (req, res) {
 				fields.forEach(function(entry) {
 					console.log(entry);
 					connection.query('SELECT * from `fields` WHERE uuid=? AND email=?', [entry.uuid, req.cookies.email], function (error, results, fields) {
-					if(results.length == 0) {
-						connection.query('INSERT INTO `fields` (uuid, email, size, lat, lng) VALUES (?,?,?,?,?)', [entry.uuid, req.cookies.email, entry.area.q, entry.centroid.coordinates[1], entry.centroid.coordinates[0]], function (error, results, fields) {	
-						});
-					}
+						if(results.length == 0) {
+							connection.query('INSERT INTO `fields` (uuid, email, size, lat, lng) VALUES (?,?,?,?,?)', [entry.uuid, req.cookies.email, entry.area.q, entry.centroid.coordinates[1], entry.centroid.coordinates[0]], function (error, results, fields) {	
+							});
+						}
+						else {
+							connection.query('SELECT * from `likes` WHERE uuid=?', [entry.uuid], function (error, results, fields) {
+								entry.likes = results;
+							});
+							
+						}
 					});
 					map.push(entry);
 				});
