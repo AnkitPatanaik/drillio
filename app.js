@@ -102,35 +102,29 @@ app.get('/home', function (req, res) {
 		res.redirect('/login');
 	}
 	else {
-		var header = "Bearer " + req.cookies.token;
-		var map = [];
-		var firstmap;
-		var i = 0;
-		request
-		.get('https://hackillinois.climate.com/api/fields?includeBoundary=false')
-		.set('Accept', 'application/json')
-		.set('Authorization', header)
-		.end(function(err, requestres){
-			// console.log(requestres.body['fields']);
-			var fields = requestres.body['fields'];
-			fields.forEach(function(entry) {
-			 	// map.push("https://maps.googleapis.com/maps/api/staticmap?center=" + entry['centroid']['coordinates'][1] + "," +   entry['centroid']['coordinates'][0] +"&zoom=12&size=300x300&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA");
-			 	
-			 	if(!i) {
-			 		firstmap = entry;
-			 		i = 1;
-			 	}
-			 	else {
-			 		map.push(entry);
-			 	}
-			});
-			// console.log(firstmap);
+		connection.query('SELECT * from `fields` WHERE email !=?', [req.cookies.email], function (error, results, fields) {
+			// console.log(results);
+			var map = []
+			var firstmap;
+			for (var i = 0; i < results.length; i++) {
+				if(i == 0) {
+					firstmap = results[i];
+				}
+				else {
+					map.push(results[i]);
+				}
+				console.log("!");
+				console.log(map);
+			}
 			res.render('home', {
 	        	title: 'Fields',
 	        	map: map,
 	        	firstmap: firstmap,
       		});
 		});
+			
+			
+	
 	}
 });
 
@@ -164,6 +158,13 @@ app.get('/view', function (req, res) {
 				// console.log(requestres.body['fields']);
 				var fields = requestres.body['fields'];
 				fields.forEach(function(entry) {
+					console.log(entry);
+					connection.query('SELECT * from `fields` WHERE uuid=? AND email=?', [entry.uuid, req.cookies.email], function (error, results, fields) {
+					if(results.length == 0) {
+						connection.query('INSERT INTO `fields` (uuid, email, size, lat, lng) VALUES (?,?,?,?,?)', [entry.uuid, req.cookies.email, entry.area.q, entry.centroid.coordinates[1], entry.centroid.coordinates[0]], function (error, results, fields) {	
+						});
+					}
+					});
 					map.push(entry);
 				});
 				// console.log(firstmap);
