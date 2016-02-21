@@ -79,46 +79,43 @@
   text-shadow: none;
 }
 </style>
-
-
-{{#each map}}
-	<a href="#" data-id="{{this.uuid}}" class="map_link"><img src="https://maps.googleapis.com/maps/api/staticmap?center={{this.centroid.coordinates.[1]}},{{this.centroid.coordinates.[0]}}&zoom=12&size=300x300&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA"></a>
-{{/each}}  
-
-
-You have X fields selected to trade
-<hr/>
-Here are all of your fields
-<hr/>
  <div id="container">
- <div class="buddy" style="display: block;"><div class="avatar" style="display: block; background-image: url(https://maps.googleapis.com/maps/api/staticmap?center={{firstmap.centroid.coordinates.[1]}},{{firstmap.centroid.coordinates.[0]}}&zoom=12&size=340x340&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA)"></div></div>
+ <div class="buddy" style="display: block;" data-id={{firstmap.uuid}}><div class="avatar" style="display: block; background-image: url(https://maps.googleapis.com/maps/api/staticmap?center={{firstmap.centroid.coordinates.[1]}},{{firstmap.centroid.coordinates.[0]}}&zoom=12&size=340x340&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA)"></div></div>
  	{{#each map}}
- 	<div class="buddy"><div class="avatar" style="display: block; background-image: url(https://maps.googleapis.com/maps/api/staticmap?center={{this.centroid.coordinates.[1]}},{{this.centroid.coordinates.[0]}}&zoom=12&size=340x340&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA)"></div></div>  
+ 	<div class="buddy" data-id={{this.uuid}}><div class="avatar" style="display: block; background-image: url(https://maps.googleapis.com/maps/api/staticmap?center={{this.centroid.coordinates.[1]}},{{this.centroid.coordinates.[0]}}&zoom=12&size=340x340&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA)"></div></div>  
  	{{/each}}
   </div>
 <script>
 $(document).ready(function(){
-
     $(".buddy").on("swiperight",function(){
+    	var id = $(this).data("id");
+    var status = 1;
       $(this).addClass('rotate-left').delay(700).fadeOut(1);
       $('.buddy').find('.status').remove();
-
-      $(this).append('<div class="status like">Like!</div>');      
+      $(this).append('<div class="status like">Like!</div>');    
+		$.get("http://localhost:3000/like/" + id + "/" + status, function( data ) {
+			console.log("ok!");
+		});
       if ( $(this).is(':last-child') ) {
-        $('.buddy:nth-child(1)').removeClass ('rotate-left rotate-right').fadeIn(300);
+        //$('.buddy:nth-child(1)').removeClass ('rotate-left rotate-right').fadeIn(300);
         alert("last!");
+
        } else {
           $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);
        }
     });  
 
    $(".buddy").on("swipeleft",function(){
+   	var id = $(this).data("id");
+   var status = 0;
     $(this).addClass('rotate-right').delay(700).fadeOut(1);
     $('.buddy').find('.status').remove();
     $(this).append('<div class="status dislike">Dislike!</div>');
-
+		$.get("http://localhost:3000/like/" + id + "/" + status, function( data ) {
+			console.log("ok!");
+		});
     if ( $(this).is(':last-child') ) {
-     $('.buddy:nth-child(1)').removeClass ('rotate-left rotate-right').fadeIn(300);
+     //$('.buddy:nth-child(1)').removeClass ('rotate-left rotate-right').fadeIn(300);
       alert('Na-na!');
      } else {
         $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);

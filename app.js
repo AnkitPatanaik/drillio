@@ -37,12 +37,35 @@ app.get('/add/:id', function (req, res) {
 	connection.query('SELECT * from `fields` WHERE uuid=?', [req.params.id], function (error, results, fields) {
 		if(results.length == 0) {
 			connection.query('INSERT INTO `fields` (uuid, email) VALUES (?,?)', [req.params.id, req.cookies.email], function (error, results, fields) {
-	  		console.log(error);
+	  		// console.log(error);
 	  		res.sendStatus(200);
 			});
 		}
 		else {
 			res.sendStatus(400);
+		}
+	});
+	
+});
+app.get('/like/:id/:status', function (req, res) {
+	// app.use(bodyParser.urlencoded({ extended: true }));
+	console.log(req.params.id);
+	var status = 0;
+	if(req.params.status == 1) {
+		status = 1;
+	}
+	connection.query('SELECT * from `likes` WHERE uuid=? AND email=?', [req.params.id, req.cookies.email], function (error, results, fields) {
+		if(results.length == 0) {
+			connection.query('INSERT INTO `likes` (uuid, email, status) VALUES (?,?,?)', [req.params.id, req.cookies.email, status], function (error, results, fields) {
+	  		// console.log(error);
+	  		res.sendStatus(200);
+			});
+		}
+		else {
+			connection.query('UPDATE `likes` SET status = ? WHERE uuid = ? AND email = ?', [status, req.params.id, req.cookies.email], function (error, results, fields) {
+	  		// console.log(error);
+	  		res.sendStatus(200);
+			});
 		}
 	});
 	
@@ -83,7 +106,7 @@ app.get('/home', function (req, res) {
 		.set('Accept', 'application/json')
 		.set('Authorization', header)
 		.end(function(err, requestres){
-			console.log(requestres.body['fields']);
+			// console.log(requestres.body['fields']);
 			var fields = requestres.body['fields'];
 			fields.forEach(function(entry) {
 			 	// map.push("https://maps.googleapis.com/maps/api/staticmap?center=" + entry['centroid']['coordinates'][1] + "," +   entry['centroid']['coordinates'][0] +"&zoom=12&size=300x300&key=AIzaSyAdaFzQqYK2DwqEtxHdcUGU_raymUebynA");
@@ -96,7 +119,7 @@ app.get('/home', function (req, res) {
 			 		map.push(entry);
 			 	}
 			});
-			console.log(firstmap);
+			// console.log(firstmap);
 			res.render('home', {
 	        	title: 'Fields',
 	        	map: map,
@@ -115,6 +138,7 @@ app.get('/add', function (req, res) {
 		res.redirect('https://climate.com/static/mfs/index.html');
 	}
 })
+
 
 app.get('/buy', function (req, res) {
 	res.send('Sell page');
