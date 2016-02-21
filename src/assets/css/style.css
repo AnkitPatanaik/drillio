@@ -1,4 +1,22 @@
 body {
     padding-top: 100px;
 }
-
+.heading-title {
+	font-family: 'Montserrat', sans-serif;
+	color: #fff;
+	text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.75);
+	text-transform: uppercase;
+	font-size: 100px;
+}
+.heading-tag {
+	font-family: 'Montserrat', sans-serif;
+	color: #fff;
+	text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+	font-size: 30px;
+	margin-top: 5px;
+}
+.heading-button {
+	margin-top: 20px;
+	font-size: 15px;
+	padding: 12px 16px;
+}
